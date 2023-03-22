@@ -145,7 +145,7 @@ class Profile
                         children: const [
                             Padding(
                               padding: EdgeInsets.only(left: 10),
-                              child: Text('My Orders',
+                              child: Text('Settings',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,

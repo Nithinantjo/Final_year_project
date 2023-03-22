@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop/create.dart';
+import 'package:shop/forgotpass.dart';
 import 'package:shop/homepage.dart';
 
 class MyLogin extends StatefulWidget {
@@ -110,7 +111,9 @@ class _MyLoginState extends State<MyLogin> {
                                 ),
                               ),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const ForgotPass()));
+                                  },
                                   child: const Text(
                                     'Forgot Password',
                                     style: TextStyle(
