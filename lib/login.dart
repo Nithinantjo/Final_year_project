@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:shop/create.dart';
 import 'package:shop/forgotpass.dart';
 import 'package:shop/homepage.dart';
+import 'package:shop/services/api.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class MyLogin extends StatefulWidget {
 }
 
 class _MyLoginState extends State<MyLogin> {
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,6 +46,7 @@ class _MyLoginState extends State<MyLogin> {
                       child: Column(
                         children: [
                           TextField(
+                            controller: emailController,
                             style: const TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                                 fillColor: Colors.grey.shade100,
@@ -55,6 +60,7 @@ class _MyLoginState extends State<MyLogin> {
                             height: 30,
                           ),
                           TextField(
+                            controller: passController,
                             style: const TextStyle(),
                             obscureText: true,
                             decoration: InputDecoration(
@@ -74,15 +80,25 @@ class _MyLoginState extends State<MyLogin> {
                               const Text(
                                 'Sign in',
                                 style: TextStyle(
-                                    fontSize: 27, fontWeight: FontWeight.w700),
+                                           fontSize: 27, fontWeight: FontWeight.w700),
                               ),
                               CircleAvatar(
                                 radius: 30,
                                 backgroundColor: const Color(0xff4c505b),
                                 child: IconButton(
                                     color: Colors.white,
-                                    onPressed: () {Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: 
-                                    (context)=>HomePage()), (route) => false);},
+                                    onPressed: () async {
+                                      Response response = await APIService.login(emailController.text, passController.text);
+                                      if(response.statusCode==200){
+                                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: 
+                                      (context)=>HomePage()), (route) => false);}
+                                      else{
+                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Wrong credentials"),));
+      emailController.clear();
+      passController.clear();
+                                      }
+                                    },
                                     icon: const Icon(
                                       Icons.arrow_forward,
                                     )),
