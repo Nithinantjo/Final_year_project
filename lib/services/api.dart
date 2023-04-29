@@ -29,4 +29,72 @@ class APIService {
       return response;
   }
   
+  static showCart(String email) async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("$baseURL/fromCart"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "email": email
+    })
+    );
+
+    return json.decode(response.body);
+  }
+
+  static increment(String email, String product) async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.put(Uri.parse("$baseURL/inc"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "email": email,
+      "product": product
+  })
+    );
+  }
+
+  static decrement(String email, String product) async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.put(Uri.parse("$baseURL/dec"),
+    headers: requestHeaders,
+    body: jsonEncode(
+      {
+        "email": email,
+        "product": product
+      }
+    ) );
+  }
+
+  static addCart(String email, String product) async{
+     Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("$baseURL/addCart"),
+    headers: requestHeaders,
+    body: jsonEncode(
+      {
+        "email": email,
+        "product": product
+      }
+    ) );
+  }
+
+  static myOrders(String email) async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("$baseURL/myorders"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "email": email
+    })
+    );
+
+    return json.decode(response.body);
+  }
+
+  static placeOrder(String email) async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("$baseURL/placeorder"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "email": email
+    })
+    );
+  }
 }

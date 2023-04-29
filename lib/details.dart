@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop/services/api.dart';
 
 class Detail extends StatefulWidget {
-  final assetPath, cookieprice, cookiename;
+  final assetPath, price, name;
+  int count;
 
-  Detail({this.assetPath, this.cookieprice, this.cookiename});
+  Detail({this.assetPath, this.price, this.name, required this.count});
 
   @override
   State<Detail> createState() => _DetailState();
@@ -13,7 +16,12 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   bool _added=false;
 
-  int _amount=1;
+  int _amount=0;
+   @override
+  void initState(){
+    _amount= widget.count;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +30,8 @@ class _DetailState extends State<Detail> {
 
       body: ListView(
         children: [
-          SizedBox(height: 15.0),
-          Padding(
+          const SizedBox(height: 15.0),
+          const Padding(
             padding: EdgeInsets.only(left: 20.0),
             child: Text(
               'Cookie',
@@ -34,7 +42,7 @@ class _DetailState extends State<Detail> {
                       color: Color(0xFFF17532))
             ),
           ),
-            SizedBox(height: 15.0),
+          const  SizedBox(height: 15.0),
             Hero(
               tag: widget.assetPath,
               child: Image.asset(widget.assetPath,
@@ -43,28 +51,28 @@ class _DetailState extends State<Detail> {
               fit: BoxFit.contain
               )
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Center(
-              child: Text(widget.cookieprice,
-                  style: TextStyle(
+              child: Text(widget.price,
+                  style: const TextStyle(
                       fontFamily: 'Varela',
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFF17532))),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Center(
-              child: Text(widget.cookiename,
-                  style: TextStyle(
+              child: Text(widget.name,
+                  style: const TextStyle(
                       color: Color(0xFF575E67),
                       fontFamily: 'Varela',
                       fontSize: 24.0)),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width - 50.0,
-                child: Text('Cold, creamy ice cream sandwiched between delicious deluxe cookies. Pick your favorite deluxe cookies and ice cream flavor.',
+                child: const Text('Cold, creamy ice cream sandwiched between delicious deluxe cookies. Pick your favorite deluxe cookies and ice cream flavor.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                       fontFamily: 'Varela',
@@ -80,6 +88,7 @@ class _DetailState extends State<Detail> {
                   setState(() {
                     _added=true;
                   });
+                  add();
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width - 50.0,
@@ -88,7 +97,7 @@ class _DetailState extends State<Detail> {
                     borderRadius: BorderRadius.circular(25.0),
                     color: Color(0xFFF17532)
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text('Add to cart',
                       style: TextStyle(
                         fontFamily: 'Varela',
@@ -110,8 +119,9 @@ class _DetailState extends State<Detail> {
                       else
                       {_added=false;}
                     });
+                    decre();
                   },
-                  child: CircleAvatar(backgroundColor: Color(0xFFF17532),
+                  child: const CircleAvatar(backgroundColor: Color(0xFFF17532),
                   radius: 25,
                   child: Icon(Icons.remove,
                   size: 30,),)),
@@ -125,8 +135,9 @@ class _DetailState extends State<Detail> {
                     setState(() {
                       _amount++;
                     });
+                    incre();
                   },
-                  child: CircleAvatar(backgroundColor: Color(0xFFF17532),
+                  child: const CircleAvatar(backgroundColor: Color(0xFFF17532),
                   radius: 25,
                   child: Icon(Icons.add,
                   size: 30,),))
@@ -135,5 +146,28 @@ class _DetailState extends State<Detail> {
             )
         ]
       ));
+  }
+    void incre() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    String? email = sharedPrefs.getString("email");
+    if(email!=null){
+      APIService.increment(email, widget.name);
+    }
+  }
+
+  void decre() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    String? email = sharedPrefs.getString("email");
+    if(email!=null){
+      APIService.decrement(email, widget.name);
+    }
+  }
+
+  void add() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    String? email = sharedPrefs.getString("email");
+    if(email!=null){
+      APIService.addCart(email, widget.name);
+    }
   }
 }

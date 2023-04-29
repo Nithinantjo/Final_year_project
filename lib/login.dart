@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/create.dart';
 import 'package:shop/forgotpass.dart';
 import 'package:shop/homepage.dart';
+import 'package:shop/main.dart';
 import 'package:shop/services/api.dart';
 
 class MyLogin extends StatefulWidget {
@@ -90,6 +92,8 @@ class _MyLoginState extends State<MyLogin> {
                                     onPressed: () async {
                                       Response response = await APIService.login(emailController.text, passController.text);
                                       if(response.statusCode==200){
+                                        final sharedPrefs = await SharedPreferences.getInstance();
+                                        sharedPrefs.setString('email', emailController.text);
                                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: 
                                       (context)=>HomePage()), (route) => false);}
                                       else{

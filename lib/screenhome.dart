@@ -29,13 +29,13 @@ class Home extends StatelessWidget {
                 childAspectRatio: 0.8,
                 children: <Widget>[
                   Cards(name: 'Burger',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,context: context),
+                      isFavorite: false,count: 0,context: context),
                   Cards(name: 'Rice',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,context: context),
+                      isFavorite: false,count: 0,context: context),
                   Cards(name: 'Sugar',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,context: context),
+                      isFavorite: false,count: 0,context: context),
                   Cards(name: 'Cookie',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,context: context),
+                      isFavorite: false,count: 0,context: context),
                 ],
               )),
           const SizedBox(height: 15.0)

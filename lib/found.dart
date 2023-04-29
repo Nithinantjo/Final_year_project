@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class Found extends StatelessWidget {
-  String searched;
-  Found({super.key, this.searched='search'});
+  String searched,price, count;
+  Found({super.key, this.searched='search', required this.price, required this.count});
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       children: [
-        _founditems(searched)
+        _founditems(searched, price, count)
         
       ],
     );
   }
-  Widget _founditems(String eachItem){
+  Widget _founditems(String eachItem, String price, String count){
     return Card(
       elevation: 20,
       child: TextButton(
@@ -30,12 +30,17 @@ class Found extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(eachItem,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 20,
               ),),
-              Text('Price: Rs 100',
-              style: TextStyle(
+              Text('Price: $price',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),),
+              Text('Count: $count',
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 15,
               ),)

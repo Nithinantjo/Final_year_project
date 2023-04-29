@@ -29,14 +29,14 @@ class _SearchState extends State<Search> {
             },
             decoration: InputDecoration(
               filled: true,
-              fillColor: Color.fromARGB(255, 148, 146, 146),
-              contentPadding: EdgeInsets.all(0),
-              prefixIcon: Icon(Icons.search, color: Colors.black,),
+              fillColor: const Color.fromARGB(255, 148, 146, 146),
+              contentPadding: const EdgeInsets.all(0),
+              prefixIcon: const Icon(Icons.search, color: Colors.black,),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50),
                 borderSide: BorderSide.none
               ),
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 fontSize: 14,
                 color: Colors.black
               ),
@@ -45,7 +45,7 @@ class _SearchState extends State<Search> {
           ),
         ),
       ),
-      body: Found(searched: search,),
+      body: Found(searched: search,price: '100',count: '15',),
       );
   }
 }

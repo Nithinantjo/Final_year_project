@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/login.dart';
 import 'package:shop/cart.dart';
+import 'package:shop/main.dart';
 import 'package:shop/myorders.dart';
 
 
@@ -187,7 +189,9 @@ class Profile
           ),
         ],));
   }
-  void signout(BuildContext ctx){
+  void signout(BuildContext ctx) async{
+    final sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.clear();
     Navigator.of(ctx).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>MyLogin()), (route) => false);
   }
 }

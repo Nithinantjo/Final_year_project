@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/details.dart';
+import 'package:shop/services/api.dart';
 
 
 class Cards extends StatefulWidget {
   final String name, price, imgpath;
+  int count;
   bool added, isFavorite;
   Cards({required this.name,required this.price,required this.imgpath,required this.added,
-    required  this.isFavorite, context, super.key,});
+    required  this.isFavorite, required this.count, context, super.key,});
 
   @override
   State<Cards> createState() => _CardsState();
 }
 
 class _CardsState extends State<Cards> {
-  int _counter=1;
+
+  int _counter =0;
+  @override
+  void initState(){
+    _counter= widget.count;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,8 +33,9 @@ class _CardsState extends State<Cards> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => Detail(
                           assetPath: widget.imgpath,
-                          cookieprice: widget.price,
-                          cookiename: widget.name,
+                          price: widget.price,
+                          name: widget.name,
+                          count: _counter,
                         )));
               },
               child: Container(
@@ -87,6 +97,7 @@ class _CardsState extends State<Cards> {
                                     setState(() {
                                       widget.added = true;
                                     });
+                                    add();
                                   },
                                   child: const Text('Add to cart',
                                       style: TextStyle(
@@ -104,6 +115,7 @@ class _CardsState extends State<Cards> {
                                     else if(_counter==1)
                                       {widget.added=false;}
                                     });
+                                    decre();
                                   },
                                   icon: const Icon(Icons.remove_circle_outline,
                                       color: Color(0xFFD17E50), size: 20.0),
@@ -120,6 +132,7 @@ class _CardsState extends State<Cards> {
                                     setState(() {
                                       _counter++;
                                     });
+                                    incre();
                                   },
                                   icon: const Icon(Icons.add_circle_outline,
                                       color: Color(0xFFD17E50), size: 20.0),
@@ -127,5 +140,28 @@ class _CardsState extends State<Cards> {
                               ]
                             ]))
                   ]))));
+  }
+  void incre() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    String? email = sharedPrefs.getString("email");
+    if(email!=null){
+      APIService.increment(email, widget.name);
+    }
+  }
+
+  void decre() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    String? email = sharedPrefs.getString("email");
+    if(email!=null){
+      APIService.decrement(email, widget.name);
+    }
+  }
+
+  void add() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    String? email = sharedPrefs.getString("email");
+    if(email!=null){
+      APIService.addCart(email, widget.name);
+    }
   }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'splash.dart';
-void main(){
+
+late SharedPreferences sharedPrefs;
+main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(shop());
 }
 
