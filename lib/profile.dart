@@ -27,7 +27,7 @@ class Profile
                           spreadRadius: 12.0,
                           blurRadius: 5.0)
                     ],
-                color: Colors.amber,
+                color: Color.fromARGB(255, 36, 150, 168),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30)
@@ -40,7 +40,12 @@ class Profile
                     children: [
                       const CircleAvatar(
                         radius: 70,
-                        backgroundColor: Colors.green,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          size: 70,
+                          color: Colors.black,
+                        ),
                       ),
                       const SizedBox(width: 30,),
                         Column(

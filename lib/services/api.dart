@@ -97,4 +97,31 @@ class APIService {
     })
     );
   }
+
+  
+  static recommend(String prod) async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("http://192.168.1.38:5050/predict"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "title": prod
+    }));
+    print(json.decode(response.body));
+    return json.decode(response.body);
+  }
+
+  static eachProd(String prod) async {
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("$baseURL/eachproduct"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "item" : prod
+    }));
+    if(response.body.isNotEmpty) {
+    return json.decode(response.body);
+}
+return {};
+  }
+
+  
 }

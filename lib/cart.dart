@@ -45,7 +45,7 @@ class _CartState extends State<Cart> {
     return Scaffold(
       backgroundColor: Color(0xFFFCFAF8),
       body: isLoading
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : ListView(children: [
               const Text('CART',
                   style: TextStyle(

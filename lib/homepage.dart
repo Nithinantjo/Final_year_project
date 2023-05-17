@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
           ), 
           child: NavigationBar( 
             height: 60, 
-            backgroundColor: Colors.amber, 
+            backgroundColor: Color.fromARGB(255, 36, 150, 168), 
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected, 
             selectedIndex: index, 
             onDestinationSelected: (index) => 

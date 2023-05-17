@@ -25,6 +25,13 @@ class _CardsState extends State<Cards> {
   }
   @override
   Widget build(BuildContext context) {
+    String Name = "";
+    if(widget.name.length<12){
+      Name = widget.name;
+    }
+    else{
+      Name = widget.name.substring(0,8) + "...";
+    }
     return Padding(
           padding:
               const EdgeInsets.only(top: 5.0, bottom: 5.0, left: 5.0, right: 5.0),
@@ -75,7 +82,7 @@ class _CardsState extends State<Cards> {
                             color: Color(0xFFCC8053),
                             fontFamily: 'Varela',
                             fontSize: 16.0)),
-                    Text(widget.name,
+                    Text(Name,
                         style: const TextStyle(
                             color: Color(0xFF575E67),
                             fontFamily: 'Varela',

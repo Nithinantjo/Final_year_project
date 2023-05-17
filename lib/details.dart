@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/services/api.dart';
 
+import 'cards.dart';
+
 class Detail extends StatefulWidget {
   final assetPath, price, name;
   int count;
@@ -14,13 +16,43 @@ class Detail extends StatefulWidget {
 }
 
 class _DetailState extends State<Detail> {
+  
+  List reccItems= [];
+  List reccDetails = [];
+  bool isLoading = true;
   bool _added=false;
+  String? email= "";
 
   int _amount=0;
    @override
   void initState(){
+    isLoading = true;
     _amount= widget.count;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    
+    final sharedPrefs = await SharedPreferences.getInstance();
+    email = sharedPrefs.getString('email');
+    if (isLoading) {
+      reccItems = await fetchData();
+      for(int i=0; i<reccItems.length; i++){
+        var item = await APIService.eachProd(reccItems[i]);
+        reccDetails.add(item);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
+  fetchData() async {
+    List recc_items = [];
+    recc_items = await APIService.recommend("Best Farms Chana Dal 500 g");
+    return recc_items;
   }
 
   @override
@@ -28,7 +60,9 @@ class _DetailState extends State<Detail> {
     return Scaffold(
       
 
-      body: ListView(
+      body:isLoading? const Center(child: CircularProgressIndicator(),): ListView(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
         children: [
           const SizedBox(height: 15.0),
           const Padding(
@@ -143,10 +177,28 @@ class _DetailState extends State<Detail> {
                   size: 30,),))
                 ],
               )
-            )
+            ),
+            GridView.count(crossAxisCount: 2,
+            shrinkWrap: true,
+            primary: false,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 15.0,
+                childAspectRatio: 0.8,
+                children: reccDetails.map((item){
+                      return Cards(name: item['name'],price: item['price'].toString(),imgpath: 'images/icon.jpg',added: check(item['carted']),
+                      isFavorite: false, count: item['amount'],context: context);
+                    }).toList(),)
         ]
       ));
   }
+
+   check(List carted) {
+    if(carted.contains(email)){
+      return true;
+    }
+    return false;
+  }
+
     void incre() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     String? email = sharedPrefs.getString("email");
