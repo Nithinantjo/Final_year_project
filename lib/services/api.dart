@@ -101,7 +101,7 @@ class APIService {
   
   static recommend(String prod) async{
     Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
-    var response = await http.post(Uri.parse("http://192.168.1.38:5050/predict"),
+    var response = await http.post(Uri.parse("http://192.168.1.39:5050/predict"),
     headers: requestHeaders,
     body: jsonEncode({
       "title": prod
@@ -123,5 +123,27 @@ class APIService {
 return {};
   }
 
+  static search(String prefix) async {
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.post(Uri.parse("$baseURL/products"),
+    headers: requestHeaders,
+    body: jsonEncode({
+      "prefix": prefix
+    }));
+    if(response.body.isNotEmpty) {
+    return json.decode(response.body);
+  }
+  return {};
+  }
+
+  static all() async{
+    Map<String, String> requestHeaders = {'Content-Type' : 'application/json'};
+    var response = await http.get(Uri.parse("$baseURL/allproducts"),
+    headers: requestHeaders);
+    if(response.body.isNotEmpty) {
+    return json.decode(response.body);
+  }
+  return {};
+  }
   
 }

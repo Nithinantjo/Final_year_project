@@ -1,8 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/cards.dart';
+import 'package:shop/services/api.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String? email;
+  List prodItems= [];
+  bool isLoading = true;
+  @override
+  void initState() {
+    isLoading = true;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    email = sharedPrefs.getString('email');
+    if (isLoading) {
+      prodItems = await fetchData();
+      setState(() {
+        isLoading = false;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
+  fetchData() async {
+    List prod_items = [];
+    prod_items = await APIService.all();
+    return prod_items;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +62,31 @@ class Home extends StatelessWidget {
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 15.0,
                 childAspectRatio: 0.8,
-                children: <Widget>[
-                  Cards(name: 'Burger',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,count: 0,context: context),
-                  Cards(name: 'Rice',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,count: 0,context: context),
-                  Cards(name: 'Sugar',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,count: 0,context: context),
-                  Cards(name: 'Cookie',price: 'Rs. 3.99',imgpath: 'images/icon.jpg',added: false,
-                      isFavorite: false,count: 0,context: context),
-                ],
+                children: prodItems.map((item){
+                      return Cards(name: item['name'],price: item['price'].toString(),imgpath: 'images/icon.jpg',added: check(item['carted']),
+                      isFavorite: false, count: coun(item['carted']),context: context);
+                    }).toList(),
               )),
           const SizedBox(height: 15.0)
         ],
       ),
     );
+  }
+  check(List carted) {
+    for(int i=0; i<carted.length; i++){
+      if(carted[i]["email"]==email){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  coun(List carted){
+        for(int i=0; i<carted.length; i++){
+      if(carted[i]["email"]==email){
+        return carted[i]["count"];
+      }
+  }
+  return 0;
   }
 }

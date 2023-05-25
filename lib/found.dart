@@ -6,8 +6,7 @@ class Found extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
+    return Column(
       children: [
         _founditems(searched, price, count)
         

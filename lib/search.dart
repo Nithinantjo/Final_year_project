@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop/found.dart';
+import 'package:shop/services/api.dart';
 
 class Search
  extends StatefulWidget {
@@ -13,6 +14,8 @@ class Search
 String search='Searched';
 
 class _SearchState extends State<Search> {
+  bool sear = true;
+  List prods = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +25,10 @@ class _SearchState extends State<Search> {
         title: Container(
           height: 45,
           child: TextField(
-            onChanged: (value){
+            onSubmitted: (value) async{
+              prods = await APIService.search(value);
               setState(() {
-                search=value;
+                sear = false;
               });
             },
             decoration: InputDecoration(
@@ -45,7 +49,16 @@ class _SearchState extends State<Search> {
           ),
         ),
       ),
-      body: Found(searched: search,price: '100',count: '15',),
+      // body:SafeArea(child: 
+      // sear? const Center(child: Text("Search Here"),) : ListView(children: prods.map((item){
+      //                 return Found(searched: item['name'],price: item['price'].toString(), count: item['amount'].toString(),);
+      //               }).toList(),)
+      //               )
+      body:sear?const Center(child: Text("Search Here"),) : ListView(children: 
+        prods.map((item){
+          return Found(searched: item["name"], price: item["price"], count: "count");
+        }).toList(),
+        ),
       );
   }
 }

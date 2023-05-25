@@ -2,15 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/login.dart';
 import 'package:shop/cart.dart';
-import 'package:shop/main.dart';
 import 'package:shop/myorders.dart';
 
 
 class Profile
- extends StatelessWidget {
+ extends StatefulWidget {
   const Profile
   ({super.key});
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  bool isLoading = true;
+  String? email;
+String? name;
+@override
+void initState() {
+  super.initState();
+}
+  @override
+  void didChangeDependencies() async {
+    if (isLoading) {
+        final sharedPrefs = await SharedPreferences.getInstance();
+  email = sharedPrefs.getString('email');
+  name = sharedPrefs.getString('name');
+  setState(() {
+    isLoading = false;
+  });
+      };
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,21 +71,21 @@ class Profile
                         ),
                       ),
                       const SizedBox(width: 30,),
-                        Column(
+                        isLoading? const Center(child: CircularProgressIndicator(),):Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text('Name',
-                            style: TextStyle(
+                          children: [
+                            Text('Name: $name',
+                            style: const TextStyle(
                               color: Color.fromARGB(255, 75, 73, 73),
                               fontSize: 15
                             ),),
-                            Text('Emai ID',
-                            style: TextStyle(
+                            Text('Emai ID: $email',
+                            style:const TextStyle(
                               color: Color.fromARGB(255, 75, 73, 73),
                               fontSize: 15
                             )),
-                            Text('Reference ID',
+                            const Text('Reference ID',
                             style: TextStyle(
                               color: Color.fromARGB(255, 75, 73, 73),
                               fontSize: 15
@@ -194,6 +217,7 @@ class Profile
           ),
         ],));
   }
+
   void signout(BuildContext ctx) async{
     final sharedPrefs = await SharedPreferences.getInstance();
     await sharedPrefs.clear();

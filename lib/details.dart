@@ -51,7 +51,7 @@ class _DetailState extends State<Detail> {
 
   fetchData() async {
     List recc_items = [];
-    recc_items = await APIService.recommend("Best Farms Chana Dal 500 g");
+    recc_items = await APIService.recommend("Oranges");
     return recc_items;
   }
 
@@ -186,17 +186,28 @@ class _DetailState extends State<Detail> {
                 childAspectRatio: 0.8,
                 children: reccDetails.map((item){
                       return Cards(name: item['name'],price: item['price'].toString(),imgpath: 'images/icon.jpg',added: check(item['carted']),
-                      isFavorite: false, count: item['amount'],context: context);
+                      isFavorite: false, count: coun(item['carted']),context: context);
                     }).toList(),)
         ]
       ));
   }
 
    check(List carted) {
-    if(carted.contains(email)){
-      return true;
+    for(int i=0; i<carted.length; i++){
+      if(carted[i]["email"]==email){
+        return true;
+      }
     }
     return false;
+  }
+
+  coun(List carted){
+        for(int i=0; i<carted.length; i++){
+      if(carted[i]["email"]==email){
+        return carted[i]["count"];
+      }
+  }
+  return 0;
   }
 
     void incre() async {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -91,9 +93,12 @@ class _MyLoginState extends State<MyLogin> {
                                     color: Colors.white,
                                     onPressed: () async {
                                       Response response = await APIService.login(emailController.text, passController.text);
+                                      String res = response.body;
+                                      print(res);
                                       if(response.statusCode==200){
                                         final sharedPrefs = await SharedPreferences.getInstance();
                                         sharedPrefs.setString('email', emailController.text);
+                                        sharedPrefs.setString('name', res);
                                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: 
                                       (context)=>HomePage()), (route) => false);}
                                       else{
