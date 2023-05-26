@@ -43,7 +43,7 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFCFAF8),
+      backgroundColor: Color.fromARGB(255, 227, 225, 223),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(children: [
@@ -65,7 +65,7 @@ class _CartState extends State<Cart> {
                     mainAxisSpacing: 15.0,
                     childAspectRatio: 0.8,
                     children: cartItems.map((item){
-                      return Cards(name: item['product']['name'],price: item['product']['price'].toString(),imgpath: 'images/icon.jpg',added: true,
+                      return Cards(name: item['product']['name'],price: item['product']['price'].toString(),imgpath: item['product']['image'],added: true,
                       isFavorite: false, count: item['count'],context: context);
                     }).toList(),
                   )),
@@ -88,7 +88,7 @@ class _CartState extends State<Cart> {
     final sharedPrefs = await SharedPreferences.getInstance();
     String? email = sharedPrefs.getString("email");
     if(email!=null){
-      APIService.placeOrder(email);
+      await APIService.placeOrder(email);
     }
     Navigator.of(ctx).pushReplacement(MaterialPageRoute(builder: (ctx)=>MyOrder()));
   }

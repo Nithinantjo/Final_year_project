@@ -54,7 +54,7 @@ class _MyOrderState extends State<MyOrder> {
                     fontWeight: FontWeight.bold)),
             const SizedBox(height: 30.0)
            ]+orderItems.map((item){
-                      return Found(searched: item['product']['name'],price: item['product']['price'].toString(), count: item['count'].toString(),);
+                      return Found(searched: item['product']['name'],price: item['product']['price'].toString(), count: item['count'], added: false, imgpath: item['product']['image'],);
                     }).toList(),
         ),
       ),

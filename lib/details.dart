@@ -8,8 +8,9 @@ import 'cards.dart';
 class Detail extends StatefulWidget {
   final assetPath, price, name;
   int count;
+  bool isadded;
 
-  Detail({this.assetPath, this.price, this.name, required this.count});
+  Detail({this.assetPath, this.price, this.name, required this.count, required this.isadded});
 
   @override
   State<Detail> createState() => _DetailState();
@@ -20,13 +21,16 @@ class _DetailState extends State<Detail> {
   List reccItems= [];
   List reccDetails = [];
   bool isLoading = true;
-  bool _added=false;
   String? email= "";
+  bool _added = true;
 
   int _amount=0;
    @override
   void initState(){
     isLoading = true;
+    
+    
+  _added=widget.isadded;
     _amount= widget.count;
     super.initState();
   }
@@ -51,7 +55,7 @@ class _DetailState extends State<Detail> {
 
   fetchData() async {
     List recc_items = [];
-    recc_items = await APIService.recommend("Oranges");
+    recc_items = await APIService.recommend(widget.name);
     return recc_items;
   }
 
@@ -68,7 +72,7 @@ class _DetailState extends State<Detail> {
           const Padding(
             padding: EdgeInsets.only(left: 20.0),
             child: Text(
-              'Cookie',
+              'DETAILS',
               style: TextStyle(
                       fontFamily: 'Varela',
                       fontSize: 42.0,
@@ -79,7 +83,7 @@ class _DetailState extends State<Detail> {
           const  SizedBox(height: 15.0),
             Hero(
               tag: widget.assetPath,
-              child: Image.asset(widget.assetPath,
+              child: Image.network(widget.assetPath,
               height: 150.0,
               width: 100.0,
               fit: BoxFit.contain
@@ -87,7 +91,7 @@ class _DetailState extends State<Detail> {
             ),
             const SizedBox(height: 20.0),
             Center(
-              child: Text(widget.price,
+              child: Text('Rs. ${widget.price}',
                   style: const TextStyle(
                       fontFamily: 'Varela',
                       fontSize: 22.0,
@@ -106,7 +110,7 @@ class _DetailState extends State<Detail> {
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width - 50.0,
-                child: const Text('Cold, creamy ice cream sandwiched between delicious deluxe cookies. Pick your favorite deluxe cookies and ice cream flavor.',
+                child: const Text('Product Description',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                       fontFamily: 'Varela',
@@ -185,7 +189,7 @@ class _DetailState extends State<Detail> {
                 mainAxisSpacing: 15.0,
                 childAspectRatio: 0.8,
                 children: reccDetails.map((item){
-                      return Cards(name: item['name'],price: item['price'].toString(),imgpath: 'images/icon.jpg',added: check(item['carted']),
+                      return Cards(name: item['name'],price: item['price'].toString(),imgpath: item['image'],added: check(item['carted']),
                       isFavorite: false, count: coun(item['carted']),context: context);
                     }).toList(),)
         ]
@@ -207,7 +211,7 @@ class _DetailState extends State<Detail> {
         return carted[i]["count"];
       }
   }
-  return 0;
+  return 1;
   }
 
     void incre() async {

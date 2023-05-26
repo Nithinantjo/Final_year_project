@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/found.dart';
 import 'package:shop/services/api.dart';
 
@@ -16,8 +17,18 @@ String search='Searched';
 class _SearchState extends State<Search> {
   bool sear = true;
   List prods = [];
+  String? email;
   @override
   Widget build(BuildContext context) {
+     @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    email = sharedPrefs.getString('email');}
     return Scaffold(
         appBar: AppBar(
         elevation: 0,
@@ -49,16 +60,28 @@ class _SearchState extends State<Search> {
           ),
         ),
       ),
-      // body:SafeArea(child: 
-      // sear? const Center(child: Text("Search Here"),) : ListView(children: prods.map((item){
-      //                 return Found(searched: item['name'],price: item['price'].toString(), count: item['amount'].toString(),);
-      //               }).toList(),)
-      //               )
       body:sear?const Center(child: Text("Search Here"),) : ListView(children: 
         prods.map((item){
-          return Found(searched: item["name"], price: item["price"], count: "count");
+          return Found(searched: item["name"], price: item["price"], count: coun(item['carted']), added: check(item['carted']), 
+          imgpath: item['image']);
         }).toList(),
         ),
       );
+  }
+     check(List carted) {
+    for(int i=0; i<carted.length; i++){
+      if(carted[i]["email"]==email){
+        return true;
+      }
+    }
+    return false;
+  }
+    coun(List carted){
+        for(int i=0; i<carted.length; i++){
+      if(carted[i]["email"]==email){
+        return carted[i]["count"];
+      }
+  }
+  return 1;
   }
 }

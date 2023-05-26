@@ -26,6 +26,7 @@ class _HomeState extends State<Home> {
     email = sharedPrefs.getString('email');
     if (isLoading) {
       prodItems = await fetchData();
+      prodItems.shuffle();
       setState(() {
         isLoading = false;
       });
@@ -43,7 +44,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFCFAF8),
-      body: ListView(
+      body:isLoading? const Center(child: CircularProgressIndicator(),) :  ListView(
         children: <Widget>[
           const SizedBox(height: 15.0),
           const Text('HOME',
@@ -62,12 +63,12 @@ class _HomeState extends State<Home> {
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 15.0,
                 childAspectRatio: 0.8,
-                children: prodItems.map((item){
-                      return Cards(name: item['name'],price: item['price'].toString(),imgpath: 'images/icon.jpg',added: check(item['carted']),
+                children:prodItems.map((item){
+                      return Cards(name: item['name'],price: item['price'].toString(),imgpath: item['image'],added: check(item['carted']),
                       isFavorite: false, count: coun(item['carted']),context: context);
                     }).toList(),
               )),
-          const SizedBox(height: 15.0)
+          const SizedBox(height: 150.0)
         ],
       ),
     );
@@ -87,6 +88,6 @@ class _HomeState extends State<Home> {
         return carted[i]["count"];
       }
   }
-  return 0;
+  return 1;
   }
 }

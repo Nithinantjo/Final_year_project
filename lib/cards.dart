@@ -43,6 +43,7 @@ class _CardsState extends State<Cards> {
                           price: widget.price,
                           name: widget.name,
                           count: _counter,
+                          isadded: widget.added,
                         )));
               },
               child: Container(
@@ -74,10 +75,10 @@ class _CardsState extends State<Cards> {
                             width: 75.0,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage(widget.imgpath),
+                                    image: NetworkImage(widget.imgpath),
                                     fit: BoxFit.contain)))),
                     const SizedBox(height: 15.0),
-                    Text(widget.price,
+                    Text('Rs. ${widget.price}',
                         style: const TextStyle(
                             color: Color(0xFFCC8053),
                             fontFamily: 'Varela',
